@@ -1,6 +1,6 @@
 from sage.stats.distributions.discrete_gaussian_integer import DiscreteGaussianDistributionIntegerSampler
 q = 2^10
-n = 5 #
+n = 150 #
 A = matrix(ZZ, n, n)
 for i in range(n):
 	for j in range(n):
@@ -25,14 +25,14 @@ pub_matrix = A * U1 * U2
 #for i in range(n):
 #	for j in range(n):
 #		pub_matrix[i, j] = pub_matrix[i ,j].powermod(1,q)
-pub_matrix.str()
+#pub_matrix.str()
 target = matrix(ZZ, 1, n)
 for i in range(n):
 	target[0, i] = ZZ.random_element(0, q)
 print("target point", target)
 coeff =  target *  A.inverse() 
 #print("coeff", coeff)
-sigma = 3
+sigma = 0.1
 decoding_coeff  =  matrix(ZZ, 1, n)
 for i in range(n):
 	D = DiscreteGaussianDistributionIntegerSampler(sigma=sigma, c= coeff[ 0, i])
@@ -43,14 +43,14 @@ near_point = decoding_coeff * A
 signature = near_point - target
 print("signature", signature)
 print("norm of signature", norm(signature))
-pub_matrix.LLL().str()
+#pub_matrix.LLL().str()
 block_B = matrix(ZZ, n,1, [0] * n)
 block_D = matrix(ZZ, 1, 1, q)
 C = block_matrix([ [pub_matrix, block_B],[target, block_D] ])
-print("C", C)
-print("A", A)
+#print("C", C)
+#print("A", A)
 M = C.BKZ(block_size = 20)
-print("M", M)
+print("M[n]", M[n])
 forge = 0
 for i in range(n):
 	forge = forge + M[n, i] * M[n, i]
